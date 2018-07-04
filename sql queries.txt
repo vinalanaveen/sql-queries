@@ -7,9 +7,6 @@ create table registration (u_name varchar(100) not null, u_password varchar(40),
 select * from registration
 
 
-create table registration (u_name varchar(100) not null, u_password varchar(40),
-						   u_confirm varchar(40), u_email varchar(100) primary key,
-						   contactno bigint unique not null) 
 						   
 insert into  registration values ('raj', 'raj@123', 'raj@123' , 'raj1718@gmail.com', 9999999999)	
  drop table post
