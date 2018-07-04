@@ -1,0 +1,466 @@
+
+
+create table registration (u_name varchar(100) not null, u_password varchar(40),
+						   u_confirm varchar(40), u_email varchar(100) primary key,
+						   contactno bigint unique not null) 
+						   
+select * from registration
+
+
+create table registration (u_name varchar(100) not null, u_password varchar(40),
+						   u_confirm varchar(40), u_email varchar(100) primary key,
+						   contactno bigint unique not null) 
+						   
+insert into  registration values ('raj', 'raj@123', 'raj@123' , 'raj1718@gmail.com', 9999999999)	
+ drop table post
+ 
+create table post
+(a_email  varchar(100) references registration (u_email), a_title varchar(100) not null , a_category  varchar(50),
+ a_price float(10), a_description text, a_city varchar(100), a_pub_date timestamp ) 
+
+alter table  post drop column a_pub_date
+select * from post 
+insert into  post values ('mani1718@gmail.com', 'ninja', 'bikes', 950000, 'bike for sale ', 'banglore')
+select * from post where a_category='cars' or a_category='bikes'
+ update post set  a_type= 'furniture' where  a_category= 'sofa'
+select count(a_email) from post where a_email='mani1718@gmail.com' group by a_email 
+select * from post where a_email = 'mani1718@gmail.com'
+alter table post add column a_type varchar(50)
+
+
+increment sequence
+==================
+select * from post
+
+alter table post add column id int
+
+ALTER TABLE post ALTER COLUMN id SET DEFAULT nextval('sequence'::regclass);
+
+drop SEQUENCE public.sequence cascade 
+
+CREATE SEQUENCE public.sequence
+    INCREMENT 1
+    START 113
+    
+
+class="col-md-5 col-md-5-offset"
+
+--------------------------------------------------------------------------------------
+
+CREATED 3 TABLES COUNTRY,AUTHOR,BOOKS AND SOME QUERIES USING 'COUNT','JOINS', AND 'GROUPBY':
+
+create table country(cid int primary key,cname varchar(20))
+create table author(aid int primary key,aname varchar(20),cid int references country(cid))
+create table books(bid int primary key,bname varchar(20),aid int references author(aid),price int,discount int)
+
+insert into country values(01,'India')
+insert into country values(02,'America')
+insert into country values(03,'Canada'),(04,'Italy'),(05,'France')
+
+select * from country
+
+insert into author values(101,'manideep',1)
+insert into author values(102,'Naveen',2),(103,'Shoukath',3),(104,'Teju',4),(105,'Madhu',5)
+
+select * from author
+
+update author set aname='Manideep' where aid=101
+
+insert into books values(1001,'Javascript',101,500,10)
+
+insert into books values(1002,'Mobile Networks',102,600,10),(1003,'Java',103,400,15),(1004,'Database',104,300,20),(1005,'Design Pattern',105,400,10)
+,(1006,'JQuery',105,500,10),(1007,'Computer Networks',102,400,15),(1008,'Bootstrap',103,200,10)
+
+select * from books
+
+select author.aid,count(books.bid) from author join books on author.aid=books.aid group by author.aid
+
+select author.aname,country.cname from country join author on country.cid=author.cid
+
+select c.cname,count(a.aid) from country c join author a on c.cid=a.cid group by c.cname
+
+insert into author values(107,'sowmya',1)
+
+select country.cname,count(author.aid) from country join author on country.cid=author.cid group by country.cname having count(author.aid)>1
+
+
+
+CREATED 3 TABLES COUNTRY,AUTHOR,BOOKS AND SOME QUERIES USING 'COUNT','JOINS', AND 'GROUPBY':
+
+create table country(cid int primary key,cname varchar(20))
+create table author(aid int primary key,aname varchar(20),cid int references country(cid))
+create table books(bid int primary key,bname varchar(20),aid int references author(aid),price int,discount int)
+
+insert into country values(01,'India')
+insert into country values(02,'America')
+insert into country values(03,'Canada'),(04,'Italy'),(05,'France')
+
+select * from country
+
+insert into author values(101,'manideep',1)
+insert into author values(102,'Naveen',2),(103,'Shoukath',3),(104,'Teju',4),(105,'Madhu',5)
+
+select * from author
+
+update author set aname='Manideep' where aid=101
+
+insert into books values(1001,'Javascript',101,500,10)
+
+insert into books values(1002,'Mobile Networks',102,600,10),(1003,'Java',103,400,15),(1004,'Database',104,300,20),(1005,'Design Pattern',105,400,10)
+,(1006,'JQuery',105,500,10),(1007,'Computer Networks',102,400,15),(1008,'Bootstrap',103,200,10)
+
+select * from books
+
+select author.aid,count(books.bid) from author join books on author.aid=books.aid group by author.aid
+
+select author.aname,country.cname from country join author on country.cid=author.cid
+
+select c.cname,count(a.aid) from country c join author a on c.cid=a.cid group by c.cname
+
+insert into author values(107,'sowmya',1)
+
+select country.cname,count(author.aid) from country join author on country.cid=author.cid group by country.cname having count(author.aid)>1
+
+----------------------------------------------------------------------
+VIEWS:
+
+create view vw_books as select books.bname,author.aname,country.cname,books.price,books.discount from country join author on country.cid=author.cid join books on author.aid=books.aid 
+
+select * from vw_books
+
+------------------------------------------------------------------------
+INDEXES:
+create index ind_books on books(bid)
+
+-------------------------------------------------------------------------
+FUNCTIONS:
+
+create or replace function fun1() returns int as
+$$
+declare total int;
+begin
+select count(*) into total from books;
+return total;
+end
+$$ language plpgsql
+
+select fun1()
+
+select * from books
+
+create or replace function fun2() returns varchar as
+$$
+declare bookname varchar;
+begin
+select bname into bookname from books;
+return bookname;
+end
+$$ language plpgsql
+
+select fun2()
+
+---------------------------------------------------------------------
+CROSS JOINS:
+
+create table madhu.processor(pno int,pname varchar(20),price int)
+
+create table madhu.harddisk(Hno int,hdd_Capacity varchar(20),price int)
+
+insert into madhu.processor values(1,'P4',3000),(2,'i3',5000),(3,'i5',7000),(4,'i7',9000)
+select * from madhu.processor
+
+insert into madhu.harddisk values(1,'500GB',3000),(2,'1TB',5000),(3,'2TB',7000),(4,'3TB',4000)
+select * from madhu.harddisk
+
+select p.pname,h.hdd_Capacity,p.price+h.price as price from madhu.processor p cross join madhu.harddisk h
+
+==============================================================================
+create table country (cid int  primary key , countryname varchar(20) )
+select * from country 
+drop table country 
+insert into country values (95, 'usa' )
+
+insert into country values (99, 'aus' )
+
+insert into country values (107, 'ban' ),(111,' spain')
+
+create table author (aid int  primary key , authorname varchar(20), cid int references country (cid) )
+select * from author
+insert into author values( 200,'bhagat',91),(203,'MarkTully',99),(210,'Kishwar',103)
+insert into author values( 205,'TaslimaNasreen',95),(207,'DalaiLama',111),
+(208,'Kapil',103),(210,'Kishwar',103)
+
+create table country (cid int  primary key , countryname varchar(20) )
+select * from country 
+drop table country 
+insert into country values (95, 'usa' )
+insert into country values (99, 'aus' )
+insert into country values (107, 'ban' ),(111,' spain')
+create table books(bid int  primary key,bookname varchar(20), authorid int references author (aid),price float(5))
+select * from author;
+select * from books;
+select * from country;
+insert into books values( 100,'half_girlfriend',200,500),(203,'MarkTully',99),(210,'Kishwar',103)
+insert into author values( 205,'TaslimaNasreen',95),(207,'DalaiLama',111),
+(208,'Kapil',103),(210,'Kishwar',103)
+------------------------------------------------------
+TRIGGERS INSERT
+create function fn_insert() 
+returns trigger as
+$$
+begin
+raise notice 'Your row updated successfully';
+return new;
+end;
+$$ language plpgsql
+
+create trigger tr_insert
+after
+update on books for each row execute procedure fn_insert();
+update books set bookname='Ashubaby' where bid=104;
+
+select * from books;
+
+------------------------------------------------------
+TRIGGERS DELETE
+create function fn_delete() 
+returns trigger as
+$$
+begin
+raise exception 'Deletion is not permitted';
+return new;
+end;
+$$ language plpgsql
+
+create trigger tr_delete
+before delete on  books 
+for each row execute procedure fn_delete();
+
+delete from books where bid=103;
+
+
+select * from books;
+
+create trigger tr_delete
+
+
+
+
+select * from EMP;
+Select * from DEPT;
+drop table student;
+
+create table attendence (Id int,Name varchar2(255),designation char(10),No_of_WorkingDays int ,Days_Present int,Days_Abesent int);
+
+drop table attendence;
+
+alter table student drop column sdate ;
+
+insert into student(sid,sname,phone_no,jdate)values(10,'raju',9700,'25-may-2010');
+insert into student(sid,sname,phone_no,jdate)values(103,'sai',97876543,'2-may-2012');
+alter table student add column rownum;
+select * from (select sid, sname,phone_no from  student )where rownum<2;
+update student set sname='raju' where row_num=2 ;
+
+
+insert into student(sid,sname,phone_no,jdate)values(103,'sai',97876543,'2-may-2012');
+alter table student add column rownum;
+select * from (select sid, sname,phone_no from  student )where rownum<2;
+update attendence set id=108 where name='palavi';
+
+create table attendence (Id int primary key , Name varchar2(255),designation char(10),Total_WorkingDays int default '24' ,Presentdays int,Days_Absent int);
+drop table attendence;
+drop SEQUENCE sequence_attendence;
+
+alter table attendence modify Total_WorkingDays default 24;
+insert into attendence (id,Name,designation,Presentdays,Days_Absent) values(109,'tarun','teacher',24,0);
+select * from ATTENDENCE;
+
+CREATE SEQUENCE sequence_attendence START WITH 109 INCREMENT BY 1;
+
+insert into attendence values (&id ,'&name','&designation',&Total_WorkingDays, &Presentdays,&Days_Absent);
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+insert into student(sid,sname,phone_no,jdate)values(103,'sai',97876543,'2-may-2012');
+alter table student add column rownum;
+select * from (select sid, sname,phone_no from  student )where rownum<2;
+update attendence set id=108 where name='palavi';
+
+create table student (Id int primary key , Name varchar2(255) Not Null ,course char(10),parents_name char(25), 
+Gender char(10),dob date , address varchar(35),phone_number number(10), mail_id varchar(10));
+
+drop table attendence;
+drop SEQUENCE sequence_attendence;
+
+alter table attendence modify Total_WorkingDays default 24;
+insert into attendence (id,Name,designation,Presentdays,Days_Absent) values(109,'tarun','teacher',24,0);
+select * from ATTENDENCE;
+
+CREATE SEQUENCE sequence_attendence START WITH 100 INCREMENT BY 1;
+
+insert into attendence values (&id ,'&name','&designation',&Total_WorkingDays, &Presentdays,&Days_Absent);
+select * FROM  STUDENT;
+
+*****************************************************29/3/2018******************************************
+CREATE TABLE Parent_details (ID int ,Parent_Name char(15),Realtionship char (10),phone_no int, address varchar(250),
+ FOREIGN KEY (id) REFERENCES student(id));
+    -----------------------------------------
+foreign_key
+CREATE TABLE Orders (OrderID int ,OrderNumber int ,id int , FOREIGN KEY (id) REFERENCES fee(id));
+---------------------------------------------------------------------------------
+select * from fee;  
+select * from Orders;
+drop table Orders;
+drop table  fees ;
+select * from fees;
+insert into fees values (101,'qwr','mca',default,250.00,200,50);
+insert into  fee (id, name, course ,Academic_year ,course_fee ,Paid_Amount,Due_Amount)values ( 101,'asdfg','btech',2018,200,200,0);
+
+insert into  fee values (&id, '&name', '&course',&Academic_year ,&course_fee ,&Paid_Amount,&Due_Amount);
+insert into  fee (id, name,course_fee ,Paid_Amount,Due_Amount)values ( 103,'asdfg',200,200,0);
+insert into Orders values(105,12345,102);
+
+insert into orders values ('&id','&ordernumber','&id');
+------------------------------------------------------------------------------------
+delete from holidaystimetable
+where rowid not in                    --to delete dupicate rows with same fields it will keep only one row 
+(select max(rowid) from holidaystimetable group by h_day);
+------------------------------------------------------------------------------------
+joins 
+
+select name,parent_name,course,phone_no from student full outer join parent_details on student.id=parent_details.id;
+
+
+create table student (Id int primary key , Name varchar2(255) Not Null ,course char(10),parents_name char(25), 
+Gender char(10),dob date , address varchar(35),phone_number number(10), mail_id varchar(10));
+..........................................................................................
+
+insert into attendence values (&id ,'&name','&designation',&Total_WorkingDays, &Presentdays,&Days_Absent);
+select * FROM  STUDENT;
+SELECT * FROM ATTENDENCE;
+select * from PARENT_DETAILS;
+insert into PARENT_DETAILS values(&id,'&parent_name','&realtionship','&phone_no','&address');
+
+
+
+select * from EMP;
+Select * from DEPT;
+drop table student;
+
+create table attendence (Id int,Name varchar2(255),designation char(10),No_of_WorkingDays int ,Days_Present int,Days_Abesent int);
+
+drop table attendence;
+
+alter table student drop column sdate ;
+
+insert into student(sid,sname,phone_no,jdate)values(10,'raju',9700,'25-may-2010');
+insert into student(sid,sname,phone_no,jdate)values(103,'sai',97876543,'2-may-2012');
+alter table student add column rownum;
+select * from (select sid, sname,phone_no from  student )where rownum<2;
+update student set sname='raju' where row_num=2 ;
+
+
+insert into student(sid,sname,phone_no,jdate)values(103,'sai',97876543,'2-may-2012');
+alter table student add column rownum;
+select * from (select sid, sname,phone_no from  student )where rownum<2;
+update attendence set id=108 where name='palavi';
+
+create table attendence (Id int primary key , Name varchar2(255),designation char(10),Total_WorkingDays int default '24' ,Presentdays int,Days_Absent int);
+drop table attendence;
+drop SEQUENCE sequence_attendence;
+
+alter table attendence modify Total_WorkingDays default 24;
+insert into attendence (id,Name,designation,Presentdays,Days_Absent) values(109,'tarun','teacher',24,0);
+select * from ATTENDENCE;
+
+CREATE SEQUENCE sequence_attendence START WITH 109 INCREMENT BY 1;
+
+insert into attendence values (&id ,'&name','&designation',&Total_WorkingDays, &Presentdays,&Days_Absent);
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+insert into student(sid,sname,phone_no,jdate)values(103,'sai',97876543,'2-may-2012');
+alter table student add column rownum;
+select * from (select sid, sname,phone_no from  student )where rownum<2;
+update attendence set id=108 where name='palavi';
+
+create table student (Id int primary key , Name varchar2(255) Not Null ,course char(10),parents_name char(25), 
+Gender char(10),dob date , address varchar(35),phone_number number(10), mail_id varchar(10));
+
+drop table attendence;
+drop SEQUENCE sequence_attendence;
+
+alter table attendence modify Total_WorkingDays default 24;
+insert into attendence (id,Name,designation,Presentdays,Days_Absent) values(109,'tarun','teacher',24,0);
+select * from ATTENDENCE;
+
+CREATE SEQUENCE sequence_attendence START WITH 100 INCREMENT BY 1;
+
+insert into attendence values (&id ,'&name','&designation',&Total_WorkingDays, &Presentdays,&Days_Absent);
+select * FROM  STUDENT;
+
+*****************************************************29/3/2018******************************************
+CREATE TABLE Parent_details (ID int ,Parent_Name char(15),Realtionship char (10),phone_no int, address varchar(250),
+ FOREIGN KEY (id) REFERENCES student(id));
+    -----------------------------------------
+foreign_key
+CREATE TABLE Orders (OrderID int ,OrderNumber int ,id int , FOREIGN KEY (id) REFERENCES fee(id));
+---------------------------------------------------------------------------------
+select * from fee;  
+select * from Orders;
+drop table Orders;
+drop table  fees ;
+select * from fees;
+insert into fees values (101,'qwr','mca',default,250.00,200,50);
+insert into  fee (id, name, course ,Academic_year ,course_fee ,Paid_Amount,Due_Amount)values ( 101,'asdfg','btech',2018,200,200,0);
+
+insert into  fee values (&id, '&name', '&course',&Academic_year ,&course_fee ,&Paid_Amount,&Due_Amount);
+insert into  fee (id, name,course_fee ,Paid_Amount,Due_Amount)values ( 103,'asdfg',200,200,0);
+insert into Orders values(105,12345,102);
+
+insert into orders values ('&id','&ordernumber','&id');
+------------------------------------------------------------------------------------
+delete from holidaystimetable
+where rowid not in                    --to delete dupicate rows with same fields it will keep only one row 
+(select max(rowid) from holidaystimetable group by h_day);
+------------------------------------------------------------------------------------
+joins 
+
+select name,parent_name,course,phone_no from student full outer join parent_details on student.id=parent_details.id;
+
+
+create table student (Id int primary key , Name varchar2(255) Not Null ,course char(10),parents_name char(25), 
+Gender char(10),dob date , address varchar(35),phone_number number(10), mail_id varchar(10));
+..........................................................................................
+
+insert into attendence values (&id ,'&name','&designation',&Total_WorkingDays, &Presentdays,&Days_Absent);
+select * FROM  STUDENT;
+SELECT * FROM ATTENDENCE;
+select * from PARENT_DETAILS;
+insert into PARENT_DETAILS values(&id,'&parent_name','&realtionship','&phone_no','&address');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
